@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+
+{% block title %}{{ data.title }}{% endblock %}
+
+{% block content %}
+
+    <h1>{{ data.message }}</h1>
+    
+    {% if data.user %}
+        <p>Welcome, {{ data.user }}!</p>
+    {% else %}
+        <p>Please log in.</p>
+    {% endif %}
+
+    <ul>
+        {% for item in data.array %}
+            <li>{{ item }}</li>
+        {% endfor %}
+    </ul>
+
+{% endblock %}
+
