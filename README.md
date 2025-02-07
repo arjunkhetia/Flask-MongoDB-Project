@@ -1,4 +1,4 @@
-# Python (Flask) Server + Swagger - Project   ![Version][version-image]
+# Python (Flask) Server + Swagger + MongoDB   ![Version][version-image]
 
 ![Linux Build][linuxbuild-image]
 ![Windows Build][windowsbuild-image]
@@ -7,10 +7,10 @@
 ![Dependency Status][dependency-image]
 ![devDependencies Status][devdependency-image]
 
-The quickest way to get start with Python (Flask) - Server + Swagger API Documentation, just clone the project:
+The quickest way to get start with Python (Flask) - Server + Swagger API Documentation + Mongodb, just clone the project:
 
 ```bash
-$ git clone https://github.com/arjunkhetia/Flask-Swagger-Project.git
+$ git clone https://github.com/arjunkhetia/Flask-MongoDB-Project.git
 ```
 
 Install dependencies:
@@ -104,7 +104,7 @@ dashboard-config.cfg -
 ```cfg
 [dashboard]
 APP_VERSION=1.0
-GIT=https://github.com/arjunkhetia/Python-Flask-Project.git
+GIT=https://github.com/arjunkhetia/Flask-MongoDB-Project.git
 BLUEPRINT_NAME=dashboard
 CUSTOM_LINK=dashboard
 MONITOR_LEVEL=3
@@ -132,7 +132,7 @@ TIMEZONE=Asia/Kolkata
 COLORS={'main':'[0,97,255]', 'static':'[255,153,0]'}
 ```
 
-![Monitoring Dashboard](https://github.com/arjunkhetia/Python-Flask-Project/blob/main/static/flask-monitoring-dashboard.png "Monitoring Dashboard")
+![Monitoring Dashboard](https://github.com/arjunkhetia/Flask-MongoDB-Project/blob/main/static/flask-monitoring-dashboard.png "Monitoring Dashboard")
 
 # Flasgger
 
@@ -193,7 +193,7 @@ swagger = Swagger(app, config=swagger_config, template=swagger_template)
 
 Swagger UI at `http://localhost:5000/apidocs`
 
-![Swagger UI](https://github.com/arjunkhetia/Flask-Swagger-Project/blob/main/static/swagger-ui.png "Swagger UI")
+![Swagger UI](https://github.com/arjunkhetia/Flask-MongoDB-Project/blob/main/static/swagger-ui.png "Swagger UI")
 
 [version-image]: https://img.shields.io/badge/Version-1.0.0-orange.svg
 [linuxbuild-image]: https://img.shields.io/badge/Linux-passing-brightgreen.svg
