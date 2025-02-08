@@ -2,4 +2,5 @@ Flask
 Flask-MonitoringDashboard
 flask-compress
 flask-cors
-flasgger
+pymongo
+Flask-PyMongo

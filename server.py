@@ -1,12 +1,11 @@
 from flask import Flask, render_template, json
 # from utilities.logger import logger
 import flask_monitoringdashboard as dashboard
-# from random import randint
 from flask_compress import Compress
 from flask_cors import CORS
 from routes import register_routes
 from werkzeug.exceptions import HTTPException
-from flasgger import Swagger
+from db import init_db
 import configparser
 
 compress = Compress()
@@ -29,11 +28,8 @@ port = config.getint("SERVER", "PORT")  # Convert to integer
 
 dashboard.config.init_from(file='config/dashboard-config.cfg')
 
-# Add new graph to monitoring dashboard
-# def numberOfNewCustomers():
-#     return float(randint(1,5))
-# numberOfNewCustomers_schedule = {'seconds': 10}
-# dashboard.add_graph("Every 10 Seconds", numberOfNewCustomers, "interval", **numberOfNewCustomers_schedule)
+# Connect to MongoDB
+init_db(app)
 
 # showing different logging levels
 # logger.debug("debug log info")
@@ -53,55 +49,6 @@ def home():
 
 # Register blueprints (modular routes)
 register_routes(app)
-
-swagger_config = {
-    "headers": [],
-    "specs": [
-        {
-            "endpoint": "apispec",
-            "route": "/apispec.json",
-            "rule_filter": lambda rule: True,  # All rules included
-            "model_filter": lambda tag: True,  # All models included
-        }
-    ],
-    "static_url_path": "/flasgger_static",
-    "swagger_ui": True,
-    "specs_route": "/apidocs/",
-}
-
-swagger_template = {
-    "swagger": "2.0",
-    "info": {
-        "title": "Flask Server API",
-        "description": "API for flask server",
-        "version": "1.0.0",
-        "contact": {
-            "responsibleOrganization": "EmanciTech",
-            "responsibleDeveloper": "Arjun Khetia",
-            "email": "arjunkhetia@gmail.com",
-            "url": "https://arjunkhetia.me",
-        },
-    },
-    "host": "localhost:5000",
-    "schemes": ["http", "https"],
-    "basePath": "/",
-    "securityDefinitions": {
-        "Bearer": {
-            "type": "apiKey",
-            "name": "Authorization",
-            "in": "header",
-            "description": "JWT Authorization header using the Bearer scheme. Example: \"Authorization: Bearer {token}\""
-        }
-    },
-    "security": [
-        {
-            "Bearer": []
-        }
-    ]
-}
-
-# Initialize Swagger for API documentation
-swagger = Swagger(app, config=swagger_config, template=swagger_template)
 
 # Generic Exception Handlers
 @app.errorhandler(HTTPException)

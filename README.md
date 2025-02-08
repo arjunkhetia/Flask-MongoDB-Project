@@ -1,4 +1,4 @@
-# Python (Flask) Server + Swagger + MongoDB   ![Version][version-image]
+# Python (Flask) Server + MongoDB - Project  ![Version][version-image]
 
 ![Linux Build][linuxbuild-image]
 ![Windows Build][windowsbuild-image]
@@ -7,7 +7,7 @@
 ![Dependency Status][dependency-image]
 ![devDependencies Status][devdependency-image]
 
-The quickest way to get start with Python (Flask) - Server + Swagger API Documentation + Mongodb, just clone the project:
+The quickest way to get start with Python (Flask) - Server + Mongodb, just clone the project:
 
 ```bash
 $ git clone https://github.com/arjunkhetia/Flask-MongoDB-Project.git
@@ -77,6 +77,52 @@ CORS(app)
 # cors = CORS(app, resources={r"/api/*": {"origins": "*"}})
 ```
 
+# PyMongo & Flask-PyMongo
+
+The PyMongo distribution contains tools for interacting with MongoDB database from Python. The bson package is an implementation of the BSON format for Python. The pymongo package is a native Python driver for MongoDB. Flask-PyMongo bridges Flask and PyMongo and provides some convenience helpers.
+
+```python
+from flask_pymongo import PyMongo
+from flask import Flask
+import configparser
+
+config = configparser.ConfigParser()
+config.read("config/app-config.cfg")
+
+mongo = PyMongo()
+
+def init_db(app: Flask):
+    app.config["MONGO_URI"] = config["DATABASE"]["MONGO_URI"]
+    mongo.init_app(app)
+```
+
+```python
+from db import init_db
+
+# Connect to MongoDB
+init_db(app)
+```
+
+```python
+from flask import jsonify
+from db import mongo
+from bson.objectid import ObjectId
+
+# Helper function to clean ObjectId (Convert ObjectId to string in a MongoDB document.)
+def clean_document(doc):
+    if isinstance(doc, dict):
+        doc["_id"] = str(doc["_id"])  # Convert ObjectId to string
+    return doc
+
+# GET All Users
+@user_bp.route("/", methods=["GET"])
+def get_users():
+    users = mongo.db.users.find()
+    users = list(users)
+    data = [clean_document(user) for user in users]
+    return jsonify(data), 200
+```
+
 # Flask-MonitoringDashboard
 
 A dashboard for automatic monitoring of Flask web-services. The Flask Monitoring Dashboard is an extension for Flask applications that offers four main functionalities:
@@ -133,67 +179,6 @@ COLORS={'main':'[0,97,255]', 'static':'[255,153,0]'}
 ```
 
 ![Monitoring Dashboard](https://github.com/arjunkhetia/Flask-MongoDB-Project/blob/main/static/flask-monitoring-dashboard.png "Monitoring Dashboard")
-
-# Flasgger
-
-Easy Swagger UI for our Flask API, Flasgger is a Flask extension to extract OpenAPI-Specification from all Flask views registered in our API.
-
-```python
-from flasgger import Swagger
-
-swagger_config = {
-    "headers": [],
-    "specs": [
-        {
-            "endpoint": "apispec",
-            "route": "/apispec.json",
-            "rule_filter": lambda rule: True,  # All rules included
-            "model_filter": lambda tag: True,  # All models included
-        }
-    ],
-    "static_url_path": "/flasgger_static",
-    "swagger_ui": True,
-    "specs_route": "/apidocs/",
-}
-
-swagger_template = {
-    "swagger": "2.0",
-    "info": {
-        "title": "Flask Server API",
-        "description": "API for flask server",
-        "version": "1.0.0",
-        "contact": {
-            "responsibleOrganization": "EmanciTech",
-            "responsibleDeveloper": "Arjun Khetia",
-            "email": "arjunkhetia@gmail.com",
-            "url": "https://arjunkhetia.me",
-        },
-    },
-    "host": "localhost:5000",
-    "schemes": ["http", "https"],
-    "basePath": "/",
-    "securityDefinitions": {
-        "Bearer": {
-            "type": "apiKey",
-            "name": "Authorization",
-            "in": "header",
-            "description": "JWT Authorization header using the Bearer scheme. Example: \"Authorization: Bearer {token}\""
-        }
-    },
-    "security": [
-        {
-            "Bearer": []
-        }
-    ]
-}
-
-# Initialize Swagger for API documentation
-swagger = Swagger(app, config=swagger_config, template=swagger_template)
-```
-
-Swagger UI at `http://localhost:5000/apidocs`
-
-![Swagger UI](https://github.com/arjunkhetia/Flask-MongoDB-Project/blob/main/static/swagger-ui.png "Swagger UI")
 
 [version-image]: https://img.shields.io/badge/Version-1.0.0-orange.svg
 [linuxbuild-image]: https://img.shields.io/badge/Linux-passing-brightgreen.svg
